@@ -1,0 +1,512 @@
+library(yarrr)
+library(dplyr)
+library(ggplot2)
+#first 6 rows of data
+head(pirates)
+#variable names
+names(pirates)
+#what type of data each variable is
+str(pirates)
+View(pirates)
+#summary statistics of all columns of the dataframe
+summary(pirates)
+#making a scatterplot
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point() +
+labs(title = "Weight vs Height of all Pirates!") +
+theme_classic()
+#making a scatterplot, weight vs height of all pirates
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5) +
+labs(title = "Weight vs Height of all Pirates!") +
+theme_classic()
+#making a scatterplot, weight vs height of all pirates
+#alpha = 0.5 makes points slightly transparent
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5) +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+vignette("ggplot2-specs").
+vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="dark_red") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+colours()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(aes(title = "Weight vs Height of all Pirates!", hjust=0.5), x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(aes(title = "Weight vs Height of all Pirates!", hjust=1), x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+aes(title = "Weight vs Height of all Pirates!", hjust="middle")
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)", hjust = "middle") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3", hjust = 0.5) +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(hjust = 0.5)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text(hjust=0.5))
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text(hjust=1))
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text(hjust = 0))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text(hjust = "middle"))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text(hjust=as.integer(0)))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text())
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(element_text(
+family = NULL,
+face = NULL,
+colour = NULL,
+size = NULL,
+hjust = 1,
+vjust = NULL,
+angle = NULL,
+lineheight = NULL,
+color = NULL,
+margin = NULL,
+debug = NULL,
+inherit.blank = FALSE
+))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic(plot.title = element_text(hjust=1))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+aes(title(hjust=1))
+ggplot(data=pirates,aes(x=height, y=weight, title(hjust=1)));
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+aes(title(hjust=1))
+ggplot(data=pirates,aes(x=height, y=weight, title(hjust=0.5))) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight, title = "Weight vs Height of all Pirates1", hjust=0.5)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight, title = "Weight vs Height of all Pirates1", hjust=0.5)) +
+geom_point(alpha=0.5, colour="red3") +
+#labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight, title = "Weight vs Height of all Pirates1", hjust=0)) +
+geom_point(alpha=0.5, colour="red3") +
+#labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic()
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5)) +
+theme(plot.xy = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5)) +
+theme(axis.title = element_text(size = 2)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+geom_save(filename="Pirates Weight vs Height Scatterplot")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave(filename="Pirates Weight vs Height Scatterplot")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave(filename="Pirates Weight vs Height Scatterplot", plot = last_plot())
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave(filename="Pirates Weight vs Height Scatterplot", plot = last_plot(), device = png())
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave(filename="Pirates Weight vs Height Scatterplot", plot = last_plot(), device = png())
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave(filename="Pirates Weight vs Height Scatterplot", plot = last_plot(), device = "png")
+#get a bunch of aesthetic choices w the following line of code:
+#vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave('pirates_scatterplot.png')
+#variable names
+names(pirates)
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age (aka can 11-year-olds take care of animals?)")
+theme(plot.title = element_text(hjust=0.5,size=10))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=0.5,size=10), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=0.5,size=10)) +
+theme(axis.title = element_text(size = 12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=0.5,size=10))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=1,size=10))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=0,size=10))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=0.5, size=14))
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+labs(title = "Parrot Ownership vs Age")
+theme(plot.title = element_text(hjust=0.5, size=14))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14))
+labs(title = "Parrot Ownership vs Age")
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+theme(plot.title = element_text(hjust=0, size=3))
+labs(title = "Parrot Ownership vs Age")
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+theme_classic() +
+theme(plot.title = element_text(hjust=0, size=100))
+labs(title = "Parrot Ownership vs Age")
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme(plot.title = element_text(hjust=0, size=100)) +
+theme_classic()
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme(plot.title = element_text(hjust=0.5, size=100)) +
+theme_classic()
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme(plot.title = element_text(hjust=0.5, size=10)) +
+theme_classic()
+theme(plot.title = element_text(hjust=0.5, size=10))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme(plot.title = element_text(hjust=0.5, size=10)) +
+theme_classic()
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=10))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=15))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element.text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=16,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=17,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+vignette("ggplot2-specs")
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=1, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=1,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.2,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.5,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.7,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+ggplot(data=pirates,aes(x=age,y=parrots)) +
+#pch for solid round marker, markers grey and transparent
+geom_point(pch=6,col=gray(level=0.3,alpha=0.6)) +
+labs(title = "Parrot Ownership vs Age") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+weight_vs_height <- ggplot(data=pirates,aes(x=height, y=weight)) +
+geom_point(alpha=0.5, colour="red3") +
+labs(title = "Weight vs Height of all Pirates!", x = "height (cm)", y = "weight (kg)") +
+theme_classic() +
+theme(plot.title = element_text(hjust=0.5, size=14)) +
+theme(axis.title = element_text(size = 12)) +
+#creates a linear (lm) line of best fit, se for CI
+geom_smooth(method='lm', se=FALSE)
+ggsave(weight_vs_height, filename = 'pirates_scatterplot.png')
