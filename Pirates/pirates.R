@@ -96,8 +96,31 @@ yuckySexHistogram <- ggplot(data=pirates,aes(x=sex))+
 
 yuckySexHistogram
 
+secondBlehSexHis <- ggplot(data=pirates,aes(x=sex))+
+  geom_bar(aes(fill=headband))
 
+secondBlehSexHis
 
+ggsave(secondBlehSexHis, filename = 'pirates_histogram.png')
+
+#making dataframe of avg and stdev beard length
+avgBeard <- pirates %>%
+  group_by(sex) %>%
+  summarize(avgBeardLength = mean(beard.length), stDevBeardLength = sd(beard.length))
+
+avgBeard
+
+#geom_col for bar chart (not histogram)
+#geom_errorbar needs aes(ymin and ymax) in order to work
+
+beardLengthByFakeGender <- ggplot(data=avgBeard, aes(x=sex, y=avgBeardLength)) +
+  geom_col(aes(fill="#ff0")) +
+  geom_errorbar(aes(ymin = avgBeardLength - stDevBeardLength, ymax = avgBeardLength + stDevBeardLength), width = 0.2) +
+  labs(title = "Distribution of beard length by 'gender'")
+  
+beardLengthByFakeGender
+
+#Data Plotting: Box Plot
 
   
 
