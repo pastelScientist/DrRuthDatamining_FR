@@ -2,7 +2,11 @@
 
 #Working Directory
 
+<<<<<<< HEAD
 setwd("~/20XX College Files/Urban Ecosystems/DrRuthDatamining_FR")
+=======
+setwd("~/2020-2021 College Files/Fall 2020/dr. ruth research + learning R")
+>>>>>>> 78891d9c195eb9d36b7a6968a4978d237905965e
 #the directory can be set to anywhere, this is just where I wanted it in Fall 2020!
 
 #Packages Libraries and Databases
@@ -54,7 +58,11 @@ summary(pirates)
 #age range is 11 to 46! Sa fint!
 
 
+<<<<<<< HEAD
 #Making Scatterplots
+=======
+#making a scatterplot
+>>>>>>> 78891d9c195eb9d36b7a6968a4978d237905965e
 
 
 #weight vs height of all pirates
@@ -68,8 +76,11 @@ weight_vs_height <- ggplot(data=pirates,aes(x=height, y=weight)) +
   #creates a linear (lm) line of best fit, se for CI
   geom_smooth(method='lm', se=FALSE)
 
+<<<<<<< HEAD
 weight_vs_height
 
+=======
+>>>>>>> 78891d9c195eb9d36b7a6968a4978d237905965e
 ggsave(weight_vs_height, filename = 'pirates_scatterplot.png')
 
 #get a bunch of aesthetic choices w the following line of code:
@@ -80,6 +91,7 @@ age_vs_parrots <- ggplot(data=pirates,aes(x=age,y=parrots)) +
   #pch for solid round marker, markers grey and transparent
   geom_point(pch=6,col=gray(level=0.3,alpha=0.6)) +
   labs(title = "Parrot Ownership vs Age") +
+<<<<<<< HEAD
   theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
   theme_classic() 
   #add custom elements to a pre-set theme by adding the arguments in a theme() ABOVE the pre-set theme
@@ -121,6 +133,19 @@ beardLengthByFakeGender <- ggplot(data=avgBeard, aes(x=sex, y=avgBeardLength)) +
 beardLengthByFakeGender
 
 #Data Plotting: Box Plot
+=======
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+  
+
+#Data Plotting: Bar Graphs
+
+
+
+
+
+
+>>>>>>> 78891d9c195eb9d36b7a6968a4978d237905965e
 
   
 
