@@ -124,6 +124,84 @@ beardLengthByFakeGender <- ggplot(data=avgBeard, aes(x=sex, y=avgBeardLength)) +
 beardLengthByFakeGender
 
 #Data Plotting: Box Plot
+#remember that a Boxplot shows categorical data split up by some kind of numeric data!
+#Can't contain 2 quantitative variables
 
-  
+ageByFakeGender <- ggplot(data=pirates, aes(x=sex,y=age, fill=headband)) +
+    geom_boxplot() +
+    facet_wrap(~headband)
 
+ageByFakeGender
+
+favePixarMovieByAge <- ggplot(data=pirates, aes(x=age, y=fav.pixar)) +
+      geom_boxplot()
+
+favePixarMovieByAge
+
+tattooCountBySwordType <- ggplot(data=pirates, aes(x=sword.type, y = tattoos)) +
+    geom_boxplot()
+
+tattooCountBySwordType
+
+#Data Plotting: Violin plot
+
+#note: pirateplot is specific to the pirate library
+
+rangeOfAgeBySword <- pirateplot(formula=age~sword.type, data=pirates, main="Pirateplot of ages by favorite sword")
+
+rangeOfAgeBySword
+
+#31
+
+heightRangeBySex <- pirateplot(formula=height~sex, data=pirates, pal="pony", theme = 3)
+
+#32
+
+piratepal(pal="pony", plot.result=TRUE)
+
+piratepal(pal="all", plot.result=TRUE)
+
+
+#Hypothesis testing: Histograms
+
+#34 - Grouping age by headband usage and then getting the mean
+avgHeadbandsAge <- pirates %>%
+    group_by(headband) %>%
+    summarize(averageAges = mean(age))
+    
+avgHeadbandsAge
+
+#35 - dataframe with only pirates with no headband
+no_headband <- pirates %>%
+  group_by(headband) %>%
+  filter(headband == "no")
+
+head(no_headband, n=10)
+
+#36 - dataframe with just no headband wearers and their ages
+no_headband_shorter <- pirates %>%
+  group_by(headband) %>%
+  filter(headband == "no") %>%
+  select(age)
+
+head(no_headband_shorter, n=10)
+
+#37
+
+yes_headband_shorter <- pirates %>%
+  group_by(headband) %>%
+  filter(headband == "yes") %>%
+  select(age)
+
+head(yes_headband_shorter, n=10)
+
+#38
+yes_headband_histogram <- ggplot(data=yes_headband_shorter, aes(x=age)) +
+    geom_histogram(color="black", fill = "#bf5700", binwidth=5) +
+    labs(title = "Headband-Wearing Pirates' Distribution of Age") +
+    theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+  #the line above MAKES TITLES GO TO THE MIDDLE OF THE PLOT! horizontal adjustment of element text! and changes font size
+    
+
+yes_headband_histogram
