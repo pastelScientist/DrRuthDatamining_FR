@@ -218,9 +218,9 @@ no_headband_histogram <- ggplot(data=no_headband_shorter, aes(x=age)) +
 
 no_headband_histogram
 
-#42
+#42, 43 added alpha = 0.5, position="identity" to superimpose
 final_headband_hists <- ggplot(data=pirates, aes(x = age, color=headband, fill = headband)) +
-  geom_histogram( binwidth=5) +
+  geom_histogram(binwidth=5, alpha = 0.5, position="identity") +
   labs(title = "Pirates' Headband Distribution by Age") +
   theme_classic() +
   theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
@@ -229,3 +229,154 @@ final_headband_hists <- ggplot(data=pirates, aes(x = age, color=headband, fill =
 
 final_headband_hists
 
+#44 (adjustments to 43)
+final_headband_hists <- ggplot(data=pirates, aes(x = age)) +
+  geom_histogram(binwidth=5, alpha = 0.5, color="black", fill="white") +
+  labs(title = "Pirates' Headband Distribution by Age") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  #the line above MAKES TITLES GO TO THE MIDDLE OF THE PLOT! horizontal adjustment of element text! and changes font size
+  geom_vline(aes(xintercept=mean(age)), color="blue", linetype="dashed",size=1) +
+  facet_grid(.~headband)
+#the above line is actually what separates by age rather than only being grouped by age
+#.~ in front means display horizontally side by side and ~. in back means display vertically
+
+final_headband_hists
+
+#45
+headband_comp_boxplot <- ggplot(data=pirates, aes(x=headband, y = age)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title = "Pirates' age distribution by headband usage") +
+  theme(plot.title = element_text(hjust=0.5, size = 14), axis.title= element_text(size=12))
+
+headband_comp_boxplot
+
+#Statistical tests section
+
+age_headband.htest <- t.test(no_headband_shorter$age, yes_headband_shorter$age, paired = FALSE, alternative='two.sided')
+
+age_headband.htest$p.value
+
+#htest is a hypothesis test object that holds all statistical results from a hypothesis test
+
+big_data_headband.htest <- t.test(formula = age ~ headband, data = pirates)
+
+big_data_headband.htest$p.value
+
+#for using one dataset for a t-test, formula = y (indep) ~ x (dep) is what you use
+
+age_headband.htest
+
+#48 correlation without assigning function to a variable
+cor.test(formula = ~height + weight, data = pirates)
+
+#50
+#Matrices of data can be used to pull out specific values
+#[ ] used to define range of values or concatenate c() to select specific values
+#[row index,column index]
+
+no_headband[1,1]
+
+no_headband[1:3, 4:8]
+
+no_headband[3:1,c(12,11,16)]
+#reordering 1:3 vs 3:1 displays rows in forward and reverse order
+
+#51
+new_sword_time <- no_headband[1:180, 14]
+
+new_sword_time
+
+mean_st <- new_sword_time %>%
+    summarize(mean = mean(sword.time, na.rm = TRUE))
+
+mean_st
+
+length_st <- new_sword_time %>%
+    summarize(lengthof = length(sword.time, na.rm=TRUE))
+
+length_st
+
+sum_st <- new_sword_time %>%
+    summarize(sum = sum(sword.time, na.rm = TRUE))
+
+sum_st
+
+results1 <- c(mean_st, length_st, sum_st)
+
+results1
+
+sample(results1, 1)
+#sample randomly samples from a dataset! holy shit! love that for them!
+
+#52 -- if statements and loops
+
+coin <- data.frame(head = "H", tail = "T")
+
+coin
+
+result <- sample(coin, 1)
+
+if(result == "T"){
+  print("TAILS Woohoo!")
+}
+
+count = 0
+
+for(i in 1:4){
+  
+  result <- sample(coin, 1)
+  
+  if(result == "T"){
+    count = count + 1
+    print("TAILS Woohoo!")
+  }
+  if(i == 4){
+    message1 = "We got"
+    message2 = "tails"
+    print(c(message1, count, message2))
+  }
+}
+
+#creating function
+
+coin.toss.time <- function(how_many) {
+  
+  count = 0
+  
+  for(i in 1:how_many){
+    
+    result <- sample(coin, 1)
+    
+    if(result == "T"){
+      count = count + 1
+    }
+  }
+  
+  return(count)
+}
+
+coin.toss.time(8)
+
+#5000 experiments where each experiment tosses a coin 40 times
+
+means_for_hist <- rep(NA, 5000)
+
+for(i in 1:5000){
+  tail_count_i = coin.toss.time(40)
+  means_for_hist[i] <- tail_count_i
+}
+
+experiment_data <- data.frame(tail_counts = means_for_hist)
+
+head(experiment_data)
+
+experiment_histogram <- ggplot(data=experiment_data, aes(x=tail_counts)) +
+  geom_histogram(binwidth = 5,color="black", fill = "#bf5700") +
+  theme_classic() +
+  labs(title = "40 Coin Toss' Tail Counts for 5000 Experiments") +
+  xlab("How Many Were Tails? (of 40 coin tosses)")
+  theme(plot.title = element_text(hjust=0.5, size = 14), axis.title= element_text(size=12))
+
+experiment_histogram
