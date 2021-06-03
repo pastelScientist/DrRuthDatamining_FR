@@ -4,6 +4,7 @@
 
 
 setwd("~/20XX College Files/Urban Ecosystems/DrRuthDatamining_FR")
+getwd()
 
 #the directory can be set to anywhere, this is just where I wanted it in Fall 2020!
 
@@ -195,13 +196,36 @@ yes_headband_shorter <- pirates %>%
 
 head(yes_headband_shorter, n=10)
 
-#38
+#38, 39, 40
 yes_headband_histogram <- ggplot(data=yes_headband_shorter, aes(x=age)) +
     geom_histogram(color="black", fill = "#bf5700", binwidth=5) +
     labs(title = "Headband-Wearing Pirates' Distribution of Age") +
     theme_classic() +
-  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
   #the line above MAKES TITLES GO TO THE MIDDLE OF THE PLOT! horizontal adjustment of element text! and changes font size
-    
+  geom_vline(aes(xintercept=mean(age)), color="blue", linetype="dashed",size=1)  
 
 yes_headband_histogram
+
+#41
+no_headband_histogram <- ggplot(data=no_headband_shorter, aes(x=age)) +
+  geom_histogram(color="black", fill = "#bf5700", binwidth=5) +
+  labs(title = "No Headbanded Pirates' Distribution of Age") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  #the line above MAKES TITLES GO TO THE MIDDLE OF THE PLOT! horizontal adjustment of element text! and changes font size
+  geom_vline(aes(xintercept=mean(age)), color="blue", linetype="dashed",size=1)  
+
+no_headband_histogram
+
+#42
+final_headband_hists <- ggplot(data=pirates, aes(x = age, color=headband, fill = headband)) +
+  geom_histogram( binwidth=5) +
+  labs(title = "Pirates' Headband Distribution by Age") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  #the line above MAKES TITLES GO TO THE MIDDLE OF THE PLOT! horizontal adjustment of element text! and changes font size
+  geom_vline(aes(xintercept=mean(age)), color="blue", linetype="dashed",size=1)  
+
+final_headband_hists
+
