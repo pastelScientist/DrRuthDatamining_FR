@@ -1,0 +1,6 @@
+"METH_CD","METH_TP","METH_NM","METH_DS"
+"LCM56","QW  ","Pharma, wf, LC/MS/MS (Sch 2440)","Human-use pharmaceuticals in filtered water by direct aqueous injection--high-performance liquid chromatography and tandem mass spectrometry (LC/MS/MS) (NWQL Schedule 2440, formerly LC9017)"
+"LCM60","QW  ","Pesticides, wf, dir inj LC/MS/MS","Pesticides in filtered water by direct aqueous injection and high performance liquid chromatography/tandem mass spectrometry (LC/MS/MS) analysis"
+"GCM99","QW  ","NWQL Schedule 4433","Wastewater compounds in whole water by continuous liquid-liquid extraction and capillary-column gas chromatography/mass spectrometry--NWQL Schedule 4433"
+"GM055","QW  ","SVOCs, bs, GCMS/SIM (DODESP)","Semivolatile organic compounds in bed sediments by gas chromatography/mass spectrometry with selected ion monitoring (EPA method 8270D; DODESP)"
+"-9999","","Null Value","Null value for cases where a method code does not exist"
