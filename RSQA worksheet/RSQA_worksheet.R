@@ -170,8 +170,40 @@ world_map
 
 #29 on rsqa worksheet has MAPPING RESOURCES
 
-##Replicating plots
+##Replicating plots -- a useful skill when looking at papers
+#Look closely and make a list of all diff things included in figure
+#then make the figure one thing at a time
 
+#before I even look at these figures, I'm going to import the Results and Sites csvs for these figures
+
+resultsData <- read.csv("replicating plots data/Results.csv")
+sitesInfo <- read.csv("replicating plots data/Results.csv")
+
+
+#1st figure -- max pyrene concs at each site sorted by county
+#elements:
+#getting the max pyrene conc of each site
+#which also means SORTING BY SITE
+#then sorting that data by county
+#then need geom_point() of that sorted data with county on x and conc on y
+#making sure to put legend to the right and have it sorted by county
+
+#for this first figure, I don't even need to import sites data!
+
+#dataframe with only pyrene
+pyreneData <- resultsData[resultsData$PARM_NM == "Pyrene, solids", ]
+
+#sorting by county -- just for my own sanity
+pyreneByCounty <- pyreneData %>%
+    arrange(COUNTY_NM)
+
+#figuring out the max pyrene value for each site
+
+maxPyrene <- pyreneByCounty %>%
+  group_by(SITE_NO, COUNTY_NM) %>%
+    summarize(largest_pyrene_conc = max(RESULT_VA))
+
+#now I need to make a geom_point to see if this worked
 
 
 
