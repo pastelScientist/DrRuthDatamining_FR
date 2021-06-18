@@ -177,7 +177,7 @@ world_map
 #before I even look at these figures, I'm going to import the Results and Sites csvs for these figures
 
 resultsData <- read.csv("replicating plots data/Results.csv")
-sitesInfo <- read.csv("replicating plots data/Results.csv")
+sitesInfo <- read.csv("replicating plots data/Sites.csv")
 
 
 #1st figure -- max pyrene concs at each site sorted by county
@@ -204,7 +204,64 @@ maxPyrene <- pyreneByCounty %>%
     summarize(largest_pyrene_conc = max(RESULT_VA))
 
 #now I need to make a geom_point to see if this worked
+figureOneReplicant <- ggplot(data=maxPyrene, aes(x=COUNTY_NM, y=largest_pyrene_conc, color = COUNTY_NM)) +
+    geom_jitter() +
+    theme_bw() +
+    theme(axis.text.x = element_blank()) +
+    labs(x = "", y = "Max Concentration of Pyrene per Site (ug/kg", title="Max Pyrene Concentration for Each Site By County")
 
+figureOneReplicant
 
+ggsave(figureOneReplicant, filename = 'figure_one_replication.png')
 
+#woohoo!! Figure 1 completed!
+
+#Figure 2: fancy MAP of California sampling sites
+#elements:
+#Map has longitude and latitude values
+#map is zoomed into the California coast
+#There is a legend for colors by county again
+#Max pyrene concentration (ug/kg) measures are listed with CIRCLES FOR IMPACT SIZE (sorted by 50, 100, 150, 200)
+
+#ok so it seems like we can still use maxPyrene dataset but with map stuff
+
+library(rgeos)
+library(ggspatial)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+#adding sites data to pyrene data
+
+pyreneWithMapData <- pyreneByCounty %>%
+  left_join(sitesInfo, by="SITE_NO")
+
+#adding lat and long values to maxPyrene dataset
+
+maxPyreneForMap <- pyreneWithMapData %>%
+  group_by(SITE_NO, COUNTY_NM.x, DEC_LONG_VA, DEC_LAT_VA) %>%
+  summarize(largest_pyrene_conc = max(RESULT_VA))
+
+#going to do map based on min and max long and lat vaLUES OH WAIT^
+#BUT FIRST we have to make the object for the world map! here it is!
+
+world <- ne_countries(scale="medium", returnclass = "sf")
+
+figure2replicant <- ggplot(data=world) +
+  geom_sf() + theme_classic() +
+  labs(title= "Map of California Sampling Sites", x = "Longitude", y = "Latitude",
+       subtitle=paste0("A total of ",(length(unique(maxPyreneForMap$SITE_NO)))," sites")) +
+  geom_point(data=maxPyreneForMap, aes(x = DEC_LONG_VA, y=DEC_LAT_VA), size =1, shape=19) +
+  coord_sf(xlim =
+             c((min(maxPyreneForMap$DEC_LONG_VA)-1),(max(maxPyreneForMap$DEC_LONG_VA)+1)),
+           ylim =
+             c((min(maxPyreneForMap$DEC_LAT_VA)-1),(max(maxPyreneForMap$DEC_LAT_VA)+1)))
+
+figure2replicant
+
+#figuring out how to make subsets in data for different concentrations
+
+max_buddies <- maxPyreneForMap %>%
+  arrange(desc(largest_pyrene_conc))
+
+max_buddies
 
