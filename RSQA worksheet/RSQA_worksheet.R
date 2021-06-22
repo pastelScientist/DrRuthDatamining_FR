@@ -247,17 +247,77 @@ world <- ne_countries(scale="medium", returnclass = "sf")
 
 figure2replicant <- ggplot(data=world) +
   geom_sf() + theme_bw() +
-  labs(title= "Map of California Sampling Sites", x = "Longitude", y = "Latitude",
+  labs(title= "Map of California Sampling Sites", x = "Longitude", y = "Latitude", color = "California County",
        subtitle=paste0("A total of ",(length(unique(pyreneWithMapData$SITE_NO)))," sites"), size = "Max Pyrene concentration (ug/kg)") +
   geom_point(data=pyreneWithMapData, aes(x = DEC_LONG_VA, y=DEC_LAT_VA, size = RESULT_VA, color = COUNTY_NM), alpha=0.5) +
   coord_sf(xlim =
              c((min(pyreneWithMapData$DEC_LONG_VA)-1),(max(pyreneWithMapData$DEC_LONG_VA)+1)),
            ylim =
-             c((min(pyreneWithMapData$DEC_LAT_VA)-1),(max(pyreneWithMapData$DEC_LAT_VA)+1)))
-  
+             c((min(pyreneWithMapData$DEC_LAT_VA)-1),(max(pyreneWithMapData$DEC_LAT_VA)+1))) +
+  theme(legend.key = element_rect(fill = "gray92"),
+        panel.background = element_rect(fill="gray92"), 
+        panel.grid = element_line(color="white",size=1))
 
 figure2replicant
 
 #the size function determines the size of each point!!! if you set it to a specific dataset it will automatically group it by subset
+#to change area... I tried stroke and that looked a bit weird but at least worked. Still brainstorming here but moving on
+
+
+#33: same thing but with a diff chemical
+
+resultsData <- read.csv("replicating plots data/Results.csv")
+sitesInfo <- read.csv("replicating plots data/Sites.csv")
+
+exp_count <- resultsData %>%
+  group_by(PARM_NM) %>%
+  summarize(count = n())
+
+head(exp_count)
+
+exp_count <- exp_count[exp_count$count>50,]
+exp_count <- exp_count[order(exp_count$count, decreasing = T), ]
+head(exp_count)
+
+#based on this, choosing Imidacloprid, wf
+
+imidData <- resultsData[resultsData$PARM_NM == "Imidacloprid, wf", ]
+
+maxImida <- imidData %>%
+  group_by(SITE_NO, COUNTY_NM) %>%
+  summarize(largest_imida = max(RESULT_VA))
+
+#now I need to make a geom_point to see if this worked
+figureOneReplicant <- ggplot(data=maxImida, aes(x=COUNTY_NM, y=largest_imida, color = COUNTY_NM)) +
+  geom_jitter() +
+  theme_bw() +
+  theme(axis.text.x = element_blank()) +
+  labs(x = "", y = "Max Concentration of Imidacloprid per Site (ug/kg)", title="Max Imidacloprid Concentration for Each Site By County")
+
+figureOneReplicant
+
+#lol kinda boring data but whatever
+
+imidaWithMapData <- imidData %>%
+  left_join(sitesInfo)
+
+world <- ne_countries(scale="medium", returnclass = "sf")
+
+figure2replicant <- ggplot(data=world) +
+  geom_sf() + theme_bw() +
+  labs(title= "Map of California Sampling Sites", x = "Longitude", y = "Latitude", color = "California County",
+       subtitle=paste0("A total of ",(length(unique(pyreneWithMapData$SITE_NO)))," sites"), size = "Max Imidacloprid concentration (ug/kg)") +
+  geom_point(data=imidaWithMapData, aes(x = DEC_LONG_VA, y=DEC_LAT_VA, size = RESULT_VA, color = COUNTY_NM), alpha=0.3) +
+  coord_sf(xlim =
+             c((min(pyreneWithMapData$DEC_LONG_VA)-1),(max(pyreneWithMapData$DEC_LONG_VA)+1)),
+           ylim =
+             c((min(pyreneWithMapData$DEC_LAT_VA)-1),(max(pyreneWithMapData$DEC_LAT_VA)+1))) +
+  theme(legend.key = element_rect(fill = "gray92"),
+        panel.background = element_rect(fill="gray92"), 
+        panel.grid = element_line(color="white",size=1))
+
+figure2replicant
+
+#not sure how I feel about this figure still......
 
 
