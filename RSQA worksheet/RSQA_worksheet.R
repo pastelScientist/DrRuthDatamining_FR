@@ -179,6 +179,7 @@ world_map
 resultsData <- read.csv("replicating plots data/Results.csv")
 sitesInfo <- read.csv("replicating plots data/Sites.csv")
 
+length(unique(resultsData$SITE_NO))
 
 #1st figure -- max pyrene concs at each site sorted by county
 #elements:
@@ -192,6 +193,8 @@ sitesInfo <- read.csv("replicating plots data/Sites.csv")
 
 #dataframe with only pyrene
 pyreneData <- resultsData[resultsData$PARM_NM == "Pyrene, solids", ]
+
+length(unique(pyreneData$SITE_NO))
 
 #sorting by county -- just for my own sanity
 pyreneByCounty <- pyreneData %>%
@@ -232,14 +235,10 @@ library(rnaturalearthdata)
 
 #adding sites data to pyrene data
 
-pyreneWithMapData <- pyreneByCounty %>%
-  left_join(sitesInfo, by="SITE_NO")
+pyreneWithMapData <- pyreneData %>%
+  left_join(sitesInfo)
 
 #adding lat and long values to maxPyrene dataset
-
-maxPyreneForMap <- pyreneWithMapData %>%
-  group_by(SITE_NO, COUNTY_NM.x, DEC_LONG_VA, DEC_LAT_VA) %>%
-  summarize(largest_pyrene_conc = max(RESULT_VA))
 
 #going to do map based on min and max long and lat vaLUES OH WAIT^
 #BUT FIRST we have to make the object for the world map! here it is!
@@ -247,21 +246,18 @@ maxPyreneForMap <- pyreneWithMapData %>%
 world <- ne_countries(scale="medium", returnclass = "sf")
 
 figure2replicant <- ggplot(data=world) +
-  geom_sf() + theme_classic() +
+  geom_sf() + theme_bw() +
   labs(title= "Map of California Sampling Sites", x = "Longitude", y = "Latitude",
-       subtitle=paste0("A total of ",(length(unique(maxPyreneForMap$SITE_NO)))," sites")) +
-  geom_point(data=maxPyreneForMap, aes(x = DEC_LONG_VA, y=DEC_LAT_VA), size =1, shape=19) +
+       subtitle=paste0("A total of ",(length(unique(pyreneWithMapData$SITE_NO)))," sites"), size = "Max Pyrene concentration (ug/kg)") +
+  geom_point(data=pyreneWithMapData, aes(x = DEC_LONG_VA, y=DEC_LAT_VA, size = RESULT_VA, color = COUNTY_NM), alpha=0.5) +
   coord_sf(xlim =
-             c((min(maxPyreneForMap$DEC_LONG_VA)-1),(max(maxPyreneForMap$DEC_LONG_VA)+1)),
+             c((min(pyreneWithMapData$DEC_LONG_VA)-1),(max(pyreneWithMapData$DEC_LONG_VA)+1)),
            ylim =
-             c((min(maxPyreneForMap$DEC_LAT_VA)-1),(max(maxPyreneForMap$DEC_LAT_VA)+1)))
+             c((min(pyreneWithMapData$DEC_LAT_VA)-1),(max(pyreneWithMapData$DEC_LAT_VA)+1)))
+  
 
 figure2replicant
 
-#figuring out how to make subsets in data for different concentrations
+#the size function determines the size of each point!!! if you set it to a specific dataset it will automatically group it by subset
 
-max_buddies <- maxPyreneForMap %>%
-  arrange(desc(largest_pyrene_conc))
-
-max_buddies
 
