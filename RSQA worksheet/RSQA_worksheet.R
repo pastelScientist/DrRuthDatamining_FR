@@ -39,7 +39,7 @@ head(exp_count)
 #for the 6.9.2021 dataset, choosing Acetaminophen
 #this is Tylenol (pain med)
 
-HIV_med_data <- myData[myData$PARM_NM == "Acetaminophen, w,f<0.2um", ]
+Tylenol_data <- myData[myData$PARM_NM == "Acetaminophen, w,f<0.2um", ]
 #^dataframe wtih only avacavir data
 
 #Abacavir is measured in ng/l
@@ -47,7 +47,7 @@ HIV_med_data <- myData[myData$PARM_NM == "Acetaminophen, w,f<0.2um", ]
 
 #17: scatterplot, then geom_jitter
 
-Tylenol_plot <- ggplot(data=HIV_med_data, aes(x=PARM_NM, y = RESULT_VA)) +
+Tylenol_plot <- ggplot(data=Tylenol_data, aes(x=PARM_NM, y = RESULT_VA)) +
   geom_jitter() +
   theme_classic() +
   labs(title = "Measurements of Acetaminophen in Pacific Northwest") +
@@ -196,10 +196,6 @@ pyreneData <- resultsData[resultsData$PARM_NM == "Pyrene, solids", ]
 
 length(unique(pyreneData$SITE_NO))
 
-#sorting by county -- just for my own sanity
-pyreneByCounty <- pyreneData %>%
-    arrange(COUNTY_NM)
-
 #figuring out the max pyrene value for each site
 
 maxPyrene <- pyreneByCounty %>%
@@ -256,12 +252,14 @@ figure2replicant <- ggplot(data=world) +
              c((min(pyreneWithMapData$DEC_LAT_VA)-1),(max(pyreneWithMapData$DEC_LAT_VA)+1))) +
   theme(legend.key = element_rect(fill = "gray92"),
         panel.background = element_rect(fill="gray92"), 
-        panel.grid = element_line(color="white",size=1))
+        panel.grid = element_line(color="white",size=1)) +
+  scale_size(range = c(0.5, 10))
+#THE ABOVE LINE DOES THE SCALE_SIZE FOR THE RANGE OF BUBBLE SIZES!!
 
 figure2replicant
 
 #the size function determines the size of each point!!! if you set it to a specific dataset it will automatically group it by subset
-#to change area... I tried stroke and that looked a bit weird but at least worked. Still brainstorming here but moving on
+
 
 
 #33: same thing but with a diff chemical
@@ -314,10 +312,100 @@ figure2replicant <- ggplot(data=world) +
              c((min(pyreneWithMapData$DEC_LAT_VA)-1),(max(pyreneWithMapData$DEC_LAT_VA)+1))) +
   theme(legend.key = element_rect(fill = "gray92"),
         panel.background = element_rect(fill="gray92"), 
-        panel.grid = element_line(color="white",size=1))
+        panel.grid = element_line(color="white",size=1)) +
+  scale_size(range = c(0.5, 10))
 
 figure2replicant
 
-#not sure how I feel about this figure still......
+#34: use data from dataset I downloaded way back in step 3 (PNSQA pharmaceuticals)
+
+#myData is the datset, exp_count shows 6 most plentiful chemicals
+
+head(exp_count)
+
+#deciding on Hydroxyphthalazinone, wf to plot
+
+hydroPhthalData <- myData[myData$PARM_NM == "Hydroxyphthalazinone, wf", ]
+
+maxHydrophthal <- hydroPhthalData %>%
+  group_by(SITE_NO, COUNTY_NM) %>%
+  summarize(largest_hydrop_conc = max(RESULT_VA))
+
+#now I need to make a geom_point to see if this worked
+figureOneReplicant <- ggplot(data=maxHydrophthal, aes(x=COUNTY_NM, y=largest_hydrop_conc, color = COUNTY_NM)) +
+  geom_jitter() +
+  theme_bw() +
+  theme(axis.text.x = element_blank()) +
+  labs(x = "", y = "Max Concentration of Hydroxyphthalazinone per Site (ug/kg", title="Max Hydroxyphthalazinone Concentration for Each Site By County")
+
+figureOneReplicant
+
+#now for figure 2, needing to import sites data bc PNSQA not CaSQA
+
+sitesInfo <- read.csv("PNSQA pharm data 6.8/Sites.csv")
+
+hydropWithMapData <- hydroPhthalData %>%
+  left_join(sitesInfo)
+
+world <- ne_countries(scale="medium", returnclass = "sf")
+
+figure2replicant <- ggplot(data=world) +
+  geom_sf() + theme_bw() +
+  labs(title= "Map of Pacific Northwest Sampling Sites", x = "Longitude", y = "Latitude", color = "Pacific Northwest County",
+       subtitle=paste0("A total of ",(length(unique(hydropWithMapData$SITE_NO)))," sites"), size = "Max Hydroxyphthalazinone concentration (ug/kg)") +
+  geom_point(data=hydropWithMapData, aes(x = DEC_LONG_VA, y=DEC_LAT_VA, size = RESULT_VA, color = COUNTY_NM), alpha=0.5) +
+  coord_sf(xlim =
+             c((min(hydropWithMapData$DEC_LONG_VA)-1),(max(hydropWithMapData$DEC_LONG_VA)+1)),
+           ylim =
+             c((min(hydropWithMapData$DEC_LAT_VA)-1),(max(hydropWithMapData$DEC_LAT_VA)+1))) +
+  theme(legend.key = element_rect(fill = "gray92"),
+        panel.background = element_rect(fill="gray92"), 
+        panel.grid = element_line(color="white",size=1)) +
+  scale_size(range = c(0.5, 5)) +
+  theme(axis.text.x = element_text(angle=-45),
+        legend.box="horizontal")
+#THE ABOVE LINE DOES THE SCALE_SIZE FOR THE RANGE OF BUBBLE SIZES!!
+
+figure2replicant
+#woohoo!
+
+##Adding statistics to your figures
+
+install.packages(ggpubr)
+#ggpubr useful function: compare_means() has lots of stats in a dataframe
+
+library(ggpubr)
+
+#36: using compare_means() on all pyrene data
+
+pyreneData <- resultsData[resultsData$PARM_NM == "Pyrene, solids", ]
+
+compare_means(RESULT_VA~COUNTY_NM,data=pyreneData, method="kruskal.test", paired=FALSE,p.adjust.method="fdr")
+#compare_means(measured_values(y)~values_changing(x)
+#method can be "t.test", "wilcox.test", "anova", and "kruskal.test"
+
+#p.signif is ns, so not significantly different
+
+#39: running compare_means on another chem pyrene and chem downloaded data set
+
+#for Acetaminophen, w,f<0.2um, aka "Tylenol_data"
+
+compare_means(RESULT_VA~COUNTY_NM,data=Tylenol_data,method="kruskal.test",paired=FALSE,p.adjust.method="fdr")
+
+#^p.signif is * so p<0.05 (95% confidence)
+
+#now for Hydroxyphthalazinone, wf aka "hydroPhthalData" :
+
+compare_means(RESULT_VA~COUNTY_NM,data=hydroPhthalData,method="kruskal.test",paired=FALSE,p.adjust.method="fdr")
+
+#^p.signif is ns so p>0.05 (no significant difference)
+
+#40: post-hoc tests woohoo!
+#first analyzing pyrene:
+posthoc_results_pyrene <- compare_means(RESULT_VA~COUNTY_NM,data=pyreneData, method="wilcox.test", paired=FALSE,p.adjust.method="fdr")
+
+#^dang all of those post-hocs and ONE set is diff from one another even though ns?!
+#lol is she about to teach us about adjusted p-values
+
 
 
