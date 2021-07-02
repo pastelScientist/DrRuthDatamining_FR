@@ -406,6 +406,138 @@ posthoc_results_pyrene <- compare_means(RESULT_VA~COUNTY_NM,data=pyreneData, met
 
 #^dang all of those post-hocs and ONE set is diff from one another even though ns?!
 #lol is she about to teach us about adjusted p-values
+#the reason why we need p values is Multiplicity Effect
+
+#41: boxplot by county of pyrene data
+
+pyreneByCounty <- ggplot(data=pyreneData, aes(x=COUNTY_NM, fill=COUNTY_NM, y=RESULT_VA))+
+    geom_boxplot() +
+    theme_classic() +
+    theme(axis.text.x = element_blank()) +
+    labs(title="Pyrene Concentration by California County", x = "Pyrene concentration (ug/kg)", y = "California County Name") +
+    stat_pvalue_manual(inherit.aes=FALSE,data=posthoc_results_pyrene_sig,label="p",y.position = 220)
+  #^43: adding posthoc result to my plot from 41!
+  #inherit.aes tells graph to use posthoc_results_sig rather than pyrene_data file 
+  #label adds text as label on our plot
+  #y.position tells graph at what value of y the bracket should be placed
+
+pyreneByCounty
+
+#42: finding only significant p values results
+
+posthoc_results_pyrene_sig <- posthoc_results_pyrene[posthoc_results_pyrene$p<0.05,]
+
+head(posthoc_results_pyrene_sig)
+
+#45: running post-hoc on tylenol and hypth data
+
+compare_means(RESULT_VA~COUNTY_NM,data=Tylenol_data,method="kruskal.test",paired=FALSE,p.adjust.method="fdr")
+
+#^p.signif is * so p<0.05 (95% confidence)
+#post-hoc shows 3 with significant differences:
+post_hoc_tylenol <- compare_means(RESULT_VA~COUNTY_NM,data=Tylenol_data, method="wilcox.test", paired=FALSE,p.adjust.method="fdr")
+
+#now for Hydroxyphthalazinone, wf aka "hydroPhthalData" :
+
+compare_means(RESULT_VA~COUNTY_NM,data=hydroPhthalData,method="kruskal.test",paired=FALSE,p.adjust.method="fdr")
+
+#post-hoc:
+post_hoc_hydroPh <- compare_means(RESULT_VA~COUNTY_NM,data=hydroPhthalData, method="wilcox.test", paired=FALSE,p.adjust.method="fdr")
+#^all insigifnicant still
+
+#plotting Tylenol with differences
+
+post_hoc_Tylenol_sig <- post_hoc_tylenol[post_hoc_tylenol$p<0.05,]
+
+tylenolByCounty <- ggplot(data=Tylenol_data, aes(x=COUNTY_NM, fill=COUNTY_NM, y=RESULT_VA))+
+  geom_boxplot() +
+  theme_classic() +
+  theme(axis.text.x = element_blank()) +
+  labs(title="Tylenol Concentration by PNSQA County", y = "Tylenol concentration (ug/kg)", legend = "County Name") +
+  stat_pvalue_manual(inherit.aes=FALSE,data=post_hoc_Tylenol_sig,label="p.signif",y.position = 220, step.increase=1)
+
+tylenolByCounty
+
+# y.position, which is the location of the first bracket
+#step.increase, which tells the plot what fraction of the total height of the plot spacing should be added between each bracket (each value of p)
 
 
+##Multivariable analysis: preparing/cleaning data
+
+#46: new data time!Inorganics all 5 regions
+
+inorganicResults <- read.csv("all 5 regions inorganic 7.2/Results.csv")
+inorganicSites <- read.csv("all 5 regions inorganic 7.2/Sites.csv")
+
+#finding median of each chemical at each site
+
+medianInorganicsBySite <- inorganicResults %>%
+    group_by(SITE_NO, PARM_NM) %>%
+        summarize(median_val = median(RESULT_VA)) %>%
+    ungroup()
+
+head(medianInorganicsBySite)
+
+#49
+
+library(tidyr)
+
+#converting from long form to short form
+#long form: measurements of one chemical at one site
+#short form: every row is one site, every column is one chemical, cells are RESULT_VA
+#metadata lost in short form, but consolidates it
+
+shortFormInorganics <- medianInorganicsBySite %>%
+    pivot_wider(id_cols = SITE_NO, names_from = PARM_NM, values_from = median_val)
+
+#wow there's a lot of NA values... I guess not all chemicals were tested at all sites (makes sense)
+
+#50: lol let's address the NA values
+
+#Na = not tested, 0 = tested and nothing found
+
+#PCA can't do NA values so we have to remove them
+
+colSums(is.na(shortFormInorganics))
+
+#choose an interesting set of columns with minimal NAs in them
+
+Interestingcolumns_data <- as.data.frame(shortFormInorganics[,c(2,7,8,9,11,12,16,17)])
+
+#making site number row name so it won't be used in PCA
+
+rownames(Interestingcolumns_data)<- shortFormInorganics$SITE_NO
+
+#now to actually remove the NAs:
+
+finaldata <- Interestingcolumns_data[complete.cases(Interestingcolumns_data), ]
+#^keeping all columns and removing "incomplete" rows (rows with NA)
+
+#ideally, have 200+ observations (rows) for PCA analysis
+
+#creating metadata file to accompany finaldata:
+
+metadata <- inorganicSites[match(rownames(finaldata),inorganicSites$SITE_NO),]
+
+#^rows are in the same order as the sites in finaldata
+
+##Multivariable analysis: Heatmaps and Hierarchical Clustering
+
+#54
+
+#create correlation matrix for variables:
+
+data_cor <- cor(finaldata)
+
+#heatmap: need pheatmap package
+
+library(pheatmap)
+
+inorganicsHeatMap <- pheatmap(data_cor,annotations=rownames(data_cor),show_rownames =T,show_colnames = T)
+
+#red is positive correlation (vars increase w/each other)
+#blue is neg correlation (1 incr while other decr)
+#white is no correlation
+
+#expectations: red diagnoal line bc chems are perfectly correlated with each other
 
