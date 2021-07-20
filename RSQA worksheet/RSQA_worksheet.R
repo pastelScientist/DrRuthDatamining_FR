@@ -3,6 +3,7 @@
 setwd("C:/Users/Fawn-Rose/Documents/20XX College/Urban Ecosystems/DrRuthDatamining_Fr/RSQA worksheet")
 getwd()
 
+library(plyr)
 library(dplyr)
 library(ggplot2)
 library(readr)
@@ -362,9 +363,9 @@ figure2replicant <- ggplot(data=world) +
         panel.background = element_rect(fill="gray92"), 
         panel.grid = element_line(color="white",size=1)) +
   scale_size(range = c(0.5, 5)) +
+#THE ABOVE LINE DOES THE SCALE_SIZE FOR THE RANGE OF BUBBLE SIZES!!
   theme(axis.text.x = element_text(angle=-45),
         legend.box="horizontal")
-#THE ABOVE LINE DOES THE SCALE_SIZE FOR THE RANGE OF BUBBLE SIZES!!
 
 figure2replicant
 #woohoo!
@@ -525,19 +526,109 @@ metadata <- inorganicSites[match(rownames(finaldata),inorganicSites$SITE_NO),]
 
 #54
 
+#correlation: 0 means no correlation observed
+#monotonic (in one direction) = as one goes up, the other goes up or down
+#non-monotnoic: one var goes up, the other goes up and then goes down
+
+#Pearson's r: for linear relationships
+#Spearman's p(rho) and Kendall's T (tau) used for non-parametric data
+
 #create correlation matrix for variables:
 
-data_cor <- cor(finaldata)
+data_cor <- cor(finaldata, method = "spearman")
 
-#heatmap: need pheatmap package
+#heatmap: need pheatmap package (55)
 
 library(pheatmap)
 
-inorganicsHeatMap <- pheatmap(data_cor,annotations=rownames(data_cor),show_rownames =T,show_colnames = T)
+inorganicsHeatMap <- pheatmap(data_cor,annotations=rownames(data_cor),color=colorRampPalette(c("blue","white","red"))(50), show_rownames =T,show_colnames = T)
 
 #red is positive correlation (vars increase w/each other)
 #blue is neg correlation (1 incr while other decr)
 #white is no correlation
 
-#expectations: red diagnoal line bc chems are perfectly correlated with each other
+#expectations: red diagonal line bc chems are perfectly correlated with each other
+
+#Pheatmap does hierarchical clustering by correlation value (the lines connecting different points)
+#dendrograms: diagrams that indicate hierarchical relationships btwn objects
+#clustering shows which data has similarities vs differences
+#why do some factors correlate similarly and why are oter factors different?
+
+#56:
+
+#now doing correlation matrix for correlations between different sites
+#transposing the data (rows are chems and columsn are sites now):
+
+data_cor <- cor(t(finaldata))
+
+pheatmap(data_cor, show_rownames=F,show_colnames=F)
+#^no labeling of row and col bc there are so many sites
+
+##Multiavariable analysis: PCA
+
+#57 has PCA resources (like the stats/conceptual side)
+
+#58:
+
+#to plot PCA analysis, we need ggbiplot
+#ggbiplot is new so not available being CRAN!
+library(devtools)
+
+install_github("vqv/ggbiplot")
+
+library(ggbiplot)
+
+#59:
+#must normalize the data since many diff units, signs, ranges
+#can use center and scale to normalize all the data
+
+prcompData <- prcomp(finaldata,center=T,scale=T)
+
+head(prcompData)
+
+# $center and $scale are means and stdev of each factor, used to normalize the data
+
+#60:
+summary(prcompData)
+
+#prop of variance is % of variance explained by PC axis
+#so from this, we know 90% can be accounted for by PC1, PC2, and PC3
+
+ggscreeplot(prcompData, type="pev")
+
+#^use all PCs whose prop of var >0.1 (see summary)
+
+ggscreeplot(prcompData,type="cev")
+#^ not technically a scree plot, but cum var plotted
+
+#61:
+
+ggbiplot(prcompData, choices=c(1,2), var.axes = F)
+#choices specify which PC axes to use for plot
+
+ggbiplot(prcompData, choices = c(1,2), var.axes=F, groups=paste(metadata$RSQA_STUDY), ellipse=T)
+#^metadata plotted on PCA!! regions and colored by region
+#ellipses are to add elipsses indicating where data for each gruop would be expected rel to PC axes
+#so outside of ellipses = OUTLIERS!!
+
+#ellipses point in diff directions but overlapping data --> diff dependencies on vars making up PC axes
+#so here, CSQA and MSQA ellipses are oriented differently
+
+
+#62:
+
+ggbiplot(prcompData, choices = c(1,2), var.axes=T, groups=paste(metadata$RSQA_STUDY)) +
+  theme_classic()
+
+#^ here, var.axes are LISTED and show which vars are driving diffs btwn groups
+#more horizontal var.axis --> more effect on the data
+
+#CSQA and MSQA ellipse explanation: MSQA has nitrogen bc fertilizers, and CSQA doesn't
+
+#63:
+
+#compare state groups instead of RSQA regions (can compare among any metadata):
+ggbiplot(prcompData, choices = c(1,2), var.axes = F, groups=paste(metadata$STATE_ABBREV), ellipse=T)
+
+#can group by numeric or categorical factors
 
