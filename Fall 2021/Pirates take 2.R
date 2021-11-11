@@ -1,7 +1,7 @@
 #Pirates Fall 2021 -- Iteration 2 for Fawn-Rose!
 
 
-#Working Directory
+##Working Directory
 getwd()
 #can change wd using Files tab on bottom right
 #navigate to desired wd, then "More" --> "Set as Working Directory"
@@ -10,7 +10,7 @@ setwd("C:/Users/Fawn-Rose/Documents/20XX College/Urban Ecosystems/DrRuthDatamini
 #Saving: save R scripts but not workspace or environment
 
 
-#Packages, Libraries and Databases
+##Packages, Libraries and Databases
 library(yarrr)
 library(dplyr)
 library(ggplot2)
@@ -27,7 +27,7 @@ str(pirates) #how many rows (obs.) and columns (variables), datatype for each
 View(pirates) #contains entire dataset for us to view
 
 
-#Descriptive Statistics
+##Descriptive Statistics
 
 #13: calculating avg pirate age:
 mean(pirates$age)
@@ -54,7 +54,7 @@ summary(pirates)
 #age range: 11 to 46
 
 
-#Data Plotting: Scatter Plot
+##Data Plotting: Scatter Plot
 
 #19-21
 weight_vs_height <- ggplot(pirates,aes(x=weight, y = height)) +
@@ -85,7 +85,7 @@ age_vs_parrots <- ggplot(pirates,aes(x=age,y=parrots)) +
 age_vs_parrots
 
 
-#Data Plotting: Bar Graphs
+##Data Plotting: Bar Graphs
 
 #24: two ways of making bar graphs
 #first is geom_bar() for histograms
@@ -132,7 +132,180 @@ beard_vs_sex_column
 
 #27: adding error bar
 beard_vs_sex_column <- ggplot(data=avg_beard_by_sex,aes(x=sex,y=average)) +
-  geom_col() +
+  geom_col(fill="#bf5700") +
   labs(title = "Average beard length by sex") +
-  geom_errorbar()
+  geom_errorbar(data=avg_beard_by_sex, aes(ymin=average-stdev, ymax=average+stdev), width = 0.2)
 beard_vs_sex_column
+
+
+##Data Plotting: Box Plot
+sex_vs_age_boxplot <- ggplot(data=pirates, aes(x=sex,y=age, fill = headband)) +
+  geom_boxplot() +
+  facet_wrap(~headband)
+sex_vs_age_boxplot
+#29: fill=headband made 6 boxplots rather than 3, 2 for each sex that has them sorted by headband status
+#30: facet_wrap(~headband) makes 2 different figures, 1 for no and 1 for yes headband. with all 6 boxplot
+
+##Data Plotting: Violin Plot
+#31:
+violin_sword_age <- pirateplot(formula=age~sword.type,data=pirates,main="Pirateplot of ages by favorite sword")
+violin_sword_age
+#pirateplot: formula= y-axis ~ x-axis, main is title
+
+#32:
+violin_height_sex <- pirateplot(formula=height~sex,data=pirates, 
+                                main = "Height of each sex on pirate ship",
+                                pal="pony",
+                                theme=3)
+violin_height_sex
+
+#33:
+piratepal(palette="pony",plot.result=TRUE)
+
+piratepal(palette="all",plot.result=TRUE)
+
+#this is so cute!!
+
+##Hypothesis Testing: Histograms
+
+#35:
+avg_age_by_headband <- pirates %>%
+                          group_by(headband) %>%
+                            summarize(avg_age = mean(age))
+
+View(avg_age_by_headband)
+
+#36: dataframe with only pirates who don't wear headbands
+no_headband <- pirates %>%
+  group_by(headband) %>%
+    filter(headband == "no")
+View(no_headband)
+
+#37:
+head(no_headband,n=10)
+
+#38:
+no_headband_shorter <- pirates %>%
+  group_by(headband) %>%
+    filter(headband == "no") %>%
+      select(headband,age)
+View(no_headband_shorter)
+
+#39:
+yes_headband_shorter <- pirates %>%
+  group_by(headband) %>%
+  filter(headband == "yes") %>%
+  select(headband,age)
+View(yes_headband_shorter)
+
+#40:
+yes_headband_hist <- ggplot(data=yes_headband_shorter, aes(x=age)) +
+  geom_histogram(color="black", fill = "#bf5700") +
+  theme_classic() +
+  labs(title = "Age distribution of Pirates who Wear Headbands") +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+
+yes_headband_hist
+#geom_histogram: color argument makes outline of each bar a certain color
+
+#41: binwidth
+yes_headband_hist <- ggplot(data=yes_headband_shorter, aes(x=age)) +
+  geom_histogram(color="black", fill = "#bf5700", binwidth=5) +
+  theme_classic() +
+  labs(title = "Age distribution of Pirates who Wear Headbands") +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+
+yes_headband_hist
+
+#42: dashed blue vert line indicating mean age
+yes_headband_hist <- ggplot(data=yes_headband_shorter, aes(x=age)) +
+  geom_histogram(color="black", fill = "#bf5700", binwidth=5) +
+  theme_classic() +
+  labs(title = "Age distribution of Pirates who Wear Headbands") +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  geom_vline(aes(xintercept=mean(age)),
+             color="blue", linetype="dashed", size=1)
+
+yes_headband_hist
+
+#43: no_headband hist
+no_headband_hist <- ggplot(data=no_headband_shorter, aes(x=age)) +
+  geom_histogram(color="black", fill = "#bf5700", binwidth=5) +
+  theme_classic() +
+  labs(title = "Age distribution of Pirates who Don't Wear Headbands") +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  geom_vline(aes(xintercept=mean(age)),
+             color="blue", linetype="dashed", size=1)
+
+no_headband_hist
+
+#44: plotting both groups from the original pirates database
+age_headband_summary_hist <- ggplot(data=pirates, aes(x=age, fill=headband, color=headband)) +
+  geom_histogram()
+age_headband_summary_hist
+
+#45: superimposing histograms
+age_headband_summary_hist <- ggplot(data=pirates, aes(x=age, fill=headband, color=headband)) +
+  geom_histogram(position="identity", alpha=0.5)
+age_headband_summary_hist
+
+#46: separate the histograms from one another 
+age_headband_summary_hist <- ggplot(data=pirates, aes(x=age)) +
+  geom_histogram(fill="white", color="black") +
+  facet_grid(. ~headband) + 
+  geom_vline(aes(xintercept=mean(age)),
+             color="blue", linetype="dashed", size=1)
+age_headband_summary_hist
+
+#48: boxplots comparing same two
+age_vs_headbands_boxplot <- ggplot(data=pirates, aes(x=headband, y = age)) +
+  geom_boxplot() 
+age_vs_headbands_boxplot
+
+#could make these plots look pretty with themes and labs but ehhh
+
+##Hypothesis Testing: Statistical tests
+
+#running student's t-test on headband vs age data
+
+#50:
+age_headband.htest <- t.test(no_headband_shorter$age,yes_headband_shorter$age,paired=FALSE,alternative='two.sided')
+
+age_headband.htest$p.value
+
+#t-test argument: datasets, default is not paired and two-tailed test
+
+#51: same test but using pirates dataframe rather than 2 sep ones
+age_headband.htest <- t.test(formula = age~headband, data=pirates)
+
+age_headband.htest$p.value
+
+#52: same thing but using piping
+
+age_headband.htest <- pirates %>%
+    t.test(formula= age~headband, data = .)
+age_headband.htest$p.value
+
+#data = . is needed because t.test function is from BaseR whereas piping is dyplr
+
+#53:
+age_headband.htest
+
+#54: correlation of height vs weight
+
+cor.test(formula = ~ height + weight, data = pirates)
+
+#55: ANOVA for tattoos (numeric) vs swords (four types)
+
+tattoos_vs_sword_type <- ggplot(data=pirates, aes(x=sword.type, y = tattoos)) +
+  geom_boxplot()
+tattoos_vs_sword_type
+
+res.aov <- aov(tattoos ~ sword.type,pirates)
+summary(res.aov)
+#shows stat diff between at least 2 groups -- time for post-hoc! but lol not until RSQA
+
+##Some programming practice
+
+
+
