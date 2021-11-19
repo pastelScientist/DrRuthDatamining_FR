@@ -307,5 +307,96 @@ summary(res.aov)
 
 ##Some programming practice
 
+no_headband[1,1]
+#^ calls row 1, column 1 data
+no_headband[1:3,4:8]
+#^calls rows 1 through 3, with data from columns 4 through 8
+no_headband[3:1,c(12,11,16)]
+#^calls rows 1 through 3, with data from columns 12, 11, and 16 (in that order)
 
+#59:
+View(pirates)
+sword.time_data <- pirates[,14]
+
+mean(sword.time_data)
+
+length(sword.time_data)
+
+sum(sword.time_data)
+
+swordresults <- c(mean(sword.time_data), length(sword.time_data), sum(sword.time_data))
+
+sample(swordresults,1)
+
+#60:
+#making cointoss vector:
+cointoss <- c(0,1)
+
+sample(cointoss,1)
+
+#making if statement to print tails if cointoss = 1, else printing heads
+if(sample(cointoss,1) == 1){
+  print("TAILS Woohoo!")
+  } else{
+  print("Ya got heads")
+  }
+
+#creating for loop to automate coin tosses (5 coin tosses)
+for(i in 1:5){
+  
+  if(sample(cointoss,1) == 1){
+    print("TAILS Woohoo!")
+  } else{
+    print("Ya got heads")
+  }
+  
+}
+
+#make a counter to add up how many times to get a tail (I also printed the count each time)
+counter = 0
+for(i in 1:5){
+  
+  if(sample(cointoss,1) == 1){
+    print("TAILS Woohoo!")
+    counter <- counter + 1
+  } else{
+    print("Ya got heads")
+  }
+  print(counter)
+}
+
+#Custom function: argument is tossing a coin any number of times, result is how many tails
+tailCounter <-function(howmany){
+  counter = 0
+  for(i in 1:howmany){
+    
+    if(sample(cointoss,1) == 1){
+      counter <- counter + 1
+    }
+  }
+  return(counter)
+}
+
+tailCounter(15)
+
+#5000 experiments, each one tossing a coin 40 times
+experiment_data <- rep(NA, 5000)
+
+for(i in 1:5000){
+  
+  experiment_data[i] <- tailCounter(40)
+  
+}
+
+#histogram of this experiment
+
+coinexpdf <- as.data.frame(experiment_data)
+
+coinexperiment_results <- ggplot(data=coinexpdf, aes(x=experiment_data)) +
+  geom_histogram(color="black", fill = "#bf5700", binwidth = 2) +
+  theme_classic() +
+  labs(title = "Coin flipping experiment results",x = "Number of tails per 40 coins flipped") +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
+
+coinexperiment_results
 
