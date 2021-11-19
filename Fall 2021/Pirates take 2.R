@@ -305,6 +305,7 @@ res.aov <- aov(tattoos ~ sword.type,pirates)
 summary(res.aov)
 #shows stat diff between at least 2 groups -- time for post-hoc! but lol not until RSQA
 
+<<<<<<< HEAD
 ##Some programming practice
 
 no_headband[1,1]
@@ -399,4 +400,7 @@ coinexperiment_results <- ggplot(data=coinexpdf, aes(x=experiment_data)) +
   theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
 
 coinexperiment_results
+=======
+
+>>>>>>> e38c6e12fbc3864ad9f7e9bafe116e1e2a88fc01
 
