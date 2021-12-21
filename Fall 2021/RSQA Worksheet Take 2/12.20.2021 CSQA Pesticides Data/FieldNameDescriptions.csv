@@ -1,0 +1,74 @@
+File,Field,Data Type,Description
+Sites,SITE_NO,TEXT,USGS site number.
+Sites,RSQA_STUDY,TEXT,Regional stream-quality assessment associated with the site record.
+Sites,RSQA_STUDY_DESC,TEXT,Description of the regional stream-quality assessment associated with the site record.
+Sites,STATION_NM,TEXT,Site descriptive name.
+Sites,LAT_VA,TEXT,Sexagesimal latitude.
+Sites,LONG_VA,TEXT,Sexagesimal longitude.
+Sites,DEC_LAT_VA,FLOAT,"Decimal latitude, NAD83"
+Sites,DEC_LONG_VA,FLOAT,"Decimal longitude, NAD83"
+Sites,COORD_METH_DESC,TEXT,Method used to determine horizonatal datum.
+Sites,COORD_ACY_DESC,TEXT,Latitude/longitude coordinate accuracy.
+Sites,COORD_DATUM_CD,TEXT,"Latitude/longitude (horizontal) coordinate datum for LAT_VA, LONG_VA"
+Sites,COUNTY_NM,TEXT,Name of the county the site is located in.
+Sites,STATE_NM,TEXT,Name of the state the site is located in.
+Sites,STATE_ABBREV,TEXT,State abbreviation.
+Results,SITE_NO,TEXT,USGS site number.
+Results,RSQA_STUDY,TEXT,Regional stream-quality assessment associated with the site record.
+Results,STATION_NM,TEXT,Site descriptive name.
+Results,COUNTY_NM,TEXT,Name of the county the site is located in.
+Results,STATE_CD,TEXT,"""State code. FIPS state code as defined by FIPS PUB 5-2: Codes for the Identification of the States, the District Of Columbia and the Outlying Areas of the United States, and Associated Areas (http://www.itl.nist.gov/fipspubs/fip5-2.htm)."""
+Results,STATE_NM,TEXT,Site descriptive name.
+Results,STATE_ABBREV,TEXT,State abbreviation.
+Results,RECORD_NO,TEXT,"""Record number is the eight-digit number that identifies the water-quality sample. The first three digits are the last three digits of the water year (1999 would be 999), and the last five digits are a data-entry sequence number."""
+Results,AGENCY_CD,TEXT,Agency code for the sample.
+Results,MEDIUM_CD_DESC,TEXT,Medium code identifies the material type and quality-assurance type of the sample.
+Results,MEDIUM_CD_DEF,TEXT,Definition of the medium code.
+Results,SAMPLE_START_DT,DATE,Start date and time of sample.
+Results,SAMPLE_START_TZ_DESC,TEXT,Sample start date time zone.
+Results,SAMPLE_END_DT,DATE,End date and time of sample.
+Results,SAMPLE_END_TZ_DESC,TEXT,Sample end date time zone.
+Results,SAMPLE_START_LOCAL_DISP_FM,TEXT,Sample local start date display. Incorporates the sample's date-precision and local time datum.
+Results,SAMPLE_START_UTC_DISP_FM,TEXT,Sample UTC start date display. Incorporates the sample's date-precision.
+Results,SAMPLE_END_LOCAL_DISP_FM,TEXT,Sample local end date display. Incorporates the sample's date-precision and local time datum.
+Results,SAMPLE_END_UTC_DISP_FM,TEXT,Sample UTC start date display. Incorporates the sample's date-precision.
+Results,LOCAL_TZ_DESC,TEXT,Time zone.
+Results,TM_DATUM_RLBLTY_CD,TEXT,Time datum reliability code. The time datum reliability code is used to describe how well the time datum is known. Possible values: 'K' equals Known time daum.
+Results,HYD_COND_CD,TEXT,"""Hydrologic condition code identifies the relative water-level height and its direction of change during the collection of the sample. Possible values: '4' equals stable, low stage; '5' equals falling stage; '6' equals stable, high stage; '7' equals peak stage; '8' equals rising stage; '9' equals stable, normal stage; 'A' equals non determined; 'X' equals not applicable."""
+Results,SAMP_TYPE_CD,TEXT,Sample type code identifies the QA type of a sample. Possible values: '1' equals spike; '2' equals blank; '7' equals replicate; '9' equals regular; 'H' equals composite (time).
+Results,HYD_EVENT_CD,TEXT,Hydrologic event code identifies a weather event or other environmental event associated with a sample. Possible values: '1' equals drought; '3' equals regulated flow; '7' equals flood; '9' equals routine sample; 'J' equals storm; 'K' equals backwater; 'X' equals not applicable.
+Results,TU_1_NM,TEXT,Taxonomic unit identification (a.k.a. tissue id). An integer number identifying a taxonomic unit in the IT IS database. See http://www.itis.usda.gov/plantproj/it is/phys_mod_all.pdf for more information.
+Results,BODY_PART_NM,TEXT,Body part description.
+Results,METH_CD,TEXT,Laboratory method code. The code used to identify the method used to determine a parameter value. These codes apply to more laboratories than the Central Laboratory.
+Results,METH_NM,TEXT,Method name. A short name that partially describes a method.
+Results,RESULT_VA,FLOAT,Value of result parameter.
+Results,RESULT_SG,TEXT,Significant figures of value of result parameter.
+Results,RESULT_RD,TEXT,Rounding code of result parameter.
+Results,REMARK_CD,TEXT,The result remark code qualifies the result value. Possible values: '<' equals less than; '>' equals greater than; 'A' equals average; 'E' equals estimated.
+Results,RPT_LEV_VA,FLOAT,Laboratory reporting limit in effect for the parameter and method at the time the measurement was made.
+Results,RPT_LEV_SG,TEXT,Laboratory reporting limit significant figures.
+Results,RPT_LEV_CD,TEXT,Report level code is a string of alpha characters that identify the analytical reporting level appropriate for the analytical method. Possible values: '-9999' equals no value specified; 'IRL' equals interim reporting level; 'LRL' equals laboratory reporting level; 'LT-MDL' equals long term method detection level; 'MDL' equals method detection limit; 'MRL' equals minimum reporting level.
+Results,RPT_LEV_NM,TEXT,Report level name. A brief description of a report level code.
+Results,PARM_CD,TEXT,Parameter code.
+Results,PARM_SEQ_GRP_NM,TEXT,Parameter-sequencing group code name.
+Results,PARM_SEQ_GRP_DS,TEXT,Parameter sequencing group description.
+Results,PARM_NM,TEXT,Parameter short name.
+Results,LOAD_DT,DATE,Date and time data were loaded into the RSQA database.
+USGSParameterCodes,PARM_CD,TEXT,Parameter code.
+USGSParameterCodes,CASRN,TEXT,The Chemical Abstracts Service (CAS) Registry Number identifier for the associated chemical constituent.
+USGSParameterCodes,PARM_SEQ_GRP_NM,TEXT,Parameter group name.
+USGSParameterCodes,PARM_SEQ_GRP_DS,TEXT,Parameter group description.
+USGSParameterCodes,PARM_NM,TEXT,Parameter short name.
+USGSParameterCodes,PARM_UNT_TX,TEXT,Parameter reporting units defined to cooperate with descriptions by USEPA.
+USGSParameterCodes,PARM_DS,TEXT,Parameter description.
+USGSParameterCodes,PARM_MEDIUM_TX,TEXT,Parameter medium.
+USGSParameterCodes,PARM_FRAC_TX,TEXT,Parameter fraction.
+USGSParameterCodes,PARM_TEMP_TX,TEXT,Indicates the temperature at which the associated parameter result value is based on or analyzed at.
+USGSParameterCodes,PARM_STAT_TX,TEXT,"""Indicates the type of statistic represented by the parameter result value. Possible values: Maximum, Mean, Median, or Minimum."""
+USGSParameterCodes,PARM_TM_TX,TEXT,Parameter time basis.
+USGSParameterCodes,PARM_WT_TX,TEXT,Parameter weight basis.
+USGSParameterCodes,PARM_SIZE_TX,TEXT,Parameter particle-size basis.
+LabMethodCodes,METH_CD,TEXT,Laboratory method code. The code used to identify the method used to determine a parameter value. Value definitions available at: http://help.waterdata.usgs.gov/method_cd
+LabMethodCodes,METH_TP,TEXT,"""Method type. A method's type. Possible values include: 'QW' equals water quality; 'SWGH' equals surface water gage height; 'SWQC' equals surface water discharge, computed; 'SWQM' equals surface water discharge, measured; 'SWVL' equals surface water velocity."""
+LabMethodCodes,METH_NM,TEXT,Method name. A short name that partially describes a method.
+LabMethodCodes,METH_DS,TEXT,Method description. A long name that fully describes a method.
