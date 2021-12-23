@@ -400,7 +400,4 @@ coinexperiment_results <- ggplot(data=coinexpdf, aes(x=experiment_data)) +
   theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12))
 
 coinexperiment_results
-=======
-
->>>>>>> e38c6e12fbc3864ad9f7e9bafe116e1e2a88fc01
 
