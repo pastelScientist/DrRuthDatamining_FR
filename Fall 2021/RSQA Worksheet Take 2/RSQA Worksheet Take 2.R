@@ -133,6 +133,7 @@ detected_hist <- ggplot(data=detectcount, aes(x=observations)) +
   theme_classic() +
   theme(plot.title = element_text(hjust=0.5, size=11), axis.title = element_text(size=12))
 detected_hist
+  
 
 #31: re-doing jitterplot of myclobutanil with nondetects
 
@@ -184,5 +185,34 @@ top_5_data_plot <- ggplot(data=corr_top_5_data, aes(x=PARM_NM, y=RESULT_VA)) +
 top_5_data_plot
 
 
-##Plotting Data on maps
 
+##Plotting Data on maps
+#49: map packages
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggspatial)
+library(rgeos)
+
+#50: grabbing site location data from Sites.csv
+getwd()
+sites <- read.csv("12.20.2021 CSQA Pesticides Data/Sites.csv")
+
+#50: merging sites data and data data
+pesticides_with_sites_top_5_corr <- corr_top_5_data %>%
+  left_join(sites)
+
+#51: world dataframe + world map
+world <- ne_countries(scale="medium", returnclass="sf")
+
+world_map <- ggplot(data=world) +
+  geom_sf() + theme_classic() +
+  labs(title = "World Map", x = "Longitude", y = "Latitude")
+world_map
+
+#52 editing the map, one line at a time
+world_map <- ggplot(data=world) +
+  geom_sf() + theme_classic() +
+  labs(title = "Map of CSQA Pesticides sampling sites", x = "Longitude", y = "Latitude") +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  geom_point(data=pesticides_with_sites_top_5_corr, aes(x=DEC_LONG_VA, y = DEC_LAT_VA), size = 1, shape=19)
+world_map
