@@ -212,7 +212,132 @@ world_map
 #52 editing the map, one line at a time
 world_map <- ggplot(data=world) +
   geom_sf() + theme_classic() +
-  labs(title = "Map of CSQA Pesticides sampling sites", x = "Longitude", y = "Latitude") +
+  labs(title = "Map of CSQA Pesticides sampling sites", x = "Longitude", y = "Latitude", subtitle=paste0("A total of ", (length(unique(sites$SITE_NO))), " sites")) +
   theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
   geom_point(data=pesticides_with_sites_top_5_corr, aes(x=DEC_LONG_VA, y = DEC_LAT_VA), size = 1, shape=19)
 world_map
+
+#53: zooming in the map!
+world_map <- ggplot(data=world) +
+  geom_sf() + theme_classic() +
+  labs(title = "Map of CSQA Pesticides sampling sites", x = "Longitude", y = "Latitude", subtitle=paste0("A total of ", (length(unique(sites$SITE_NO))), " sites")) +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  geom_point(data=pesticides_with_sites_top_5_corr, aes(x=DEC_LONG_VA, y = DEC_LAT_VA), size = 1, shape=19) +
+  coord_sf(xlim = c((min(sites$DEC_LONG_VA)-1), (max(sites$DEC_LONG_VA)+1)), 
+           ylim=c((min(sites$DEC_LAT_VA)-1), (max(sites$DEC_LAT_VA)+1)))
+world_map
+#^coord_sf for coordinates for simple features map, xlim and ylim based on min and max values of our sites lat and long
+#^54: adding +1 and -1 for sligtly more zoomed out map
+
+#55: irrelevant here bc CSQA is only in CA
+
+
+#messing around with maps for state lines
+library(maps)
+
+states <- map_data("state")
+
+ggplot(data = world) +
+  geom_sf() +
+  geom_polygon(data=states, aes(x=long, y=lat, fill = region)) +
+  coord_sf(xlim = c((min(states$long)-1), (max(states$long)+1)), 
+           ylim=c((min(states$lat)-1), (max(states$lat)+1))) +
+  guides(fill=FALSE)
+
+#ok seems a bit funky but we are just gonna try this out...
+
+world_map <- ggplot(data=world) +
+  geom_sf() + theme_classic() +
+  labs(title = "Map of CSQA Pesticides sampling sites", x = "Longitude", y = "Latitude", subtitle=paste0("A total of ", (length(unique(sites$SITE_NO))), " sites")) +
+  theme(plot.title = element_text(hjust=0.5, size=14), axis.title = element_text(size=12)) +
+  geom_polygon(data=states, aes(x=long, y=lat, fill = region)) +
+  geom_point(data=pesticides_with_sites_top_5_corr, aes(x=DEC_LONG_VA, y = DEC_LAT_VA), size = 1, shape=19) +
+  coord_sf(xlim = c((min(sites$DEC_LONG_VA)-1), (max(sites$DEC_LONG_VA)+1)), 
+           ylim=c((min(sites$DEC_LAT_VA)-1), (max(sites$DEC_LAT_VA)+1))) +
+  guides(fill=FALSE)
+world_map
+
+#hmm yeah they do still seem a little bit off... what if we just switched over to the maps package completely?
+
+us_map <- map_data("usa")
+
+test_map <- ggplot() + 
+  geom_polygon(data = us_map, aes(x=long, y = lat, group = group), fill = "white", color = "black") + 
+  geom_polygon(data=states, aes(x=long, y=lat, fill = region, group=group), color = "black") +
+  geom_point(data=pesticides_with_sites_top_5_corr, aes(x=DEC_LONG_VA, y = DEC_LAT_VA), size = 1, shape=19) +
+  coord_fixed(xlim = c((min(sites$DEC_LONG_VA)-1), (max(sites$DEC_LONG_VA)+1)), 
+           ylim=c((min(sites$DEC_LAT_VA)-1), (max(sites$DEC_LAT_VA)+1))) +
+  guides(fill=FALSE)
+test_map
+
+#that... just might have worked??
+#I don't even think we really needed the US map undereath it, let's see...
+test_map <- ggplot() + 
+  geom_polygon(data=states, aes(x=long, y=lat, fill = region, group=group), color = "black") +
+  geom_point(data=pesticides_with_sites_top_5_corr, aes(x=DEC_LONG_VA, y = DEC_LAT_VA), size = 1, shape=19) +
+  coord_fixed(xlim = c((min(sites$DEC_LONG_VA)-5), (max(sites$DEC_LONG_VA)+5)), 
+              ylim=c((min(sites$DEC_LAT_VA)-5), (max(sites$DEC_LAT_VA)+5))) +
+  guides(fill=FALSE)
+test_map
+#yeah we didn't even need the big US map okay okay
+
+
+##Replicating Plots -- moreso experimenting with nondetects here
+
+problemsetData <- read.csv("ProblemsetRSQAData/Results.csv")
+problemsetSites <- read.csv("ProblemsetRSQAData/Sites.csv")
+
+#so before I actually replicate the plots, I'm going to get nondetects outta here
+
+corr_problemset_data <- problemsetData %>%
+  mutate(RESULT_CORR = ifelse(REMARK_CD == "<",0,RESULT_VA))
+
+#looking at detected numbers
+
+detectcount <- corr_problemset_data %>%
+  filter(REMARK_CD != "<") %>%
+  filter(RESULT_CORR != "NA") %>%
+  group_by(PARM_NM) %>%
+  summarize(observations = n())
+detectcount
+
+detected_hist <- ggplot(data=detectcount, aes(x=observations)) +
+  geom_histogram(binwidth = 50) +
+  labs(title = "Number of parameters (y) that had x number of observations") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5, size=11), axis.title = element_text(size=12))
+detected_hist
+
+#changing detectcount to only include observations >25
+
+detectcount <- detectcount[detectcount$observations >25, ]
+detectcount <- detectcount[order(detectcount$observations, decreasing=T),]
+
+#applying that to top 10 of corrected data
+
+corr_top_10_data <- corr_problemset_data[corr_problemset_data$PARM_NM %in% detectcount$PARM_NM[1:10], ]
+
+#plots
+top_10_data_plot <- ggplot(data=corr_top_10_data, aes(x=PARM_NM, y=RESULT_CORR, color=PARM_NM)) +
+  geom_jitter() +
+  labs(title = "Top 10 most detected chemicals", x = "Chemical name", y = "Concentration detected (ng/L)")+
+  theme_classic() +
+  theme(axis.text.x = element_blank())
+top_10_data_plot
+
+
+top_10_data_plot <- ggplot(data=corr_top_10_data, aes(x=PARM_NM, y=RESULT_CORR, color=PARM_NM)) +
+  geom_jitter() +
+  facet_wrap(. ~PARM_NM, scales = "free") +
+  labs(title = "Top 10 most detected chemicals", x = "Chemical name", y = "Concentration detected (ng/L)")+
+  theme_classic() +
+  theme(axis.text.x = element_blank())
+top_10_data_plot
+
+#hmmm... I think for now I'm going to skip this replicating plots section since it won't rly do me much good with nondetects not being in there
+
+
+
+##Running Statistical Tests
+
+
