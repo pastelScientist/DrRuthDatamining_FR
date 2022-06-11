@@ -10,8 +10,10 @@
 #7: making this file + setting working directory
 #working directory for BIG BOY:
 setwd("C:/Users/Fawn-Rose/Documents/20XX College/Urban Ecosystems/DrRuthDatamining_FR/Fall 2021/RSQA Worksheet Take 2")
-#working directory for new compy:
+#working directory for SOPHIE:
 setwd("D:/College/Urban Ecosystems Research/DrRuthDatamining_FR/Fall 2021/RSQA Worksheet Take 2")
+#working directory for newest laptop:
+setwd("C:/Users/ducky/Documents/Dr. Ruth Research/DrRuthDatamining_FR/Fall 2021/RSQA Worksheet Take 2")
 getwd()
 
 
